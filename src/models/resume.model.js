@@ -1,4 +1,8 @@
-const resumeSchema = new Schema({
+  import mongoose, { Schema } from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+
+  const resumeSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",

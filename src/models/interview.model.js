@@ -1,4 +1,7 @@
-const interviewSchema = new Schema({
+   import mongoose, { Schema } from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+   const interviewSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: "User",
@@ -9,6 +12,11 @@ const interviewSchema = new Schema({
         ref: "Resume",
         required: true
     },
+    role: {
+        type: String,
+        required: true  // "Frontend Developer", "Backend Engineer" etc
+    },
+    tips: [{ type: String }],
     
     mode: {
         type: String,

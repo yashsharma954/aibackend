@@ -1,4 +1,7 @@
-const questionSchema = new Schema({
+   import mongoose, { Schema } from "mongoose";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+   const questionSchema = new Schema({
     interview: {
         type: Schema.Types.ObjectId,
         ref: "Interview",
@@ -36,12 +39,21 @@ const questionSchema = new Schema({
         confidenceScore: Number,
         contentRelevance: Number
     },
+    difficulty: {
+    type: String,
+    enum: ["easy", "medium", "hard"],
+    default: "medium"
+},
+isAnswered: {
+    type: Boolean,
+    default: false
+},
 
     questionType: {
-        type: String,
-        enum: ["technical", "behavioral", "hr", "project", "situation"],
-        default: "technical"
-    }
+    type: String,
+    enum: ["technical", "behavioral", "hr", "project", "situational"], // "situation" → "situational"
+    default: "technical"
+},
 }, { timestamps: true });
 
 export const Question = mongoose.model("Question", questionSchema);

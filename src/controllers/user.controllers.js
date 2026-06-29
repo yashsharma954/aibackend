@@ -3,6 +3,26 @@ import {ApiError} from "../utilis/ApiError.js";
 import {ApiResponse} from "../utilis/ApiResponse.js";
 import { User } from "../models/user.model.js";
 
+const generateAccessAndRefereshTokens = async(userId) =>{
+    try {
+        const user= await User.findById(userId)
+        console.log(user);
+        const accessToken = user.generateAccessToken()
+        console.log(accessToken);
+        const refreshToken = user.generateRefreshToken()
+        console.log(refreshToken);
+
+        user.refreshToken = refreshToken
+        await user.save({ validateBeforeSave: false })
+
+        return {accessToken, refreshToken}
+
+
+    } catch (error) {
+        throw new ApiError(500, "Something went wrong while generating referesh and access token")
+    }
+}
+
 const registeruser=asyncHandler(async(req,res)=>{
     // get user details from frontend
     // validation - not empty
@@ -14,7 +34,7 @@ const registeruser=asyncHandler(async(req,res)=>{
     const{fullName,email,password}=req.body;
 
 
-    if(fullName==""){
+    if(!fullName){
         throw new ApiError(400,"fullName is required");
         
     }
@@ -24,7 +44,7 @@ const registeruser=asyncHandler(async(req,res)=>{
 }
     
    
-    if(password==""){
+    if(!password){
         throw new ApiError(400,"password is required");
         
     }
@@ -69,5 +89,55 @@ const registeruser=asyncHandler(async(req,res)=>{
 
 } )
 
+const loginuser=asyncHandler(async(req,res)=>{
+    const {email,password}=req.body;
+    if (!email ) {
+  throw new ApiError(400, "Username required");
+    }
+
+    if(!password){
+        throw new ApiError(400,"password required");
+    }
+
+     const user = await User.findOne({email });
+       
+       if (!user) {
+      throw new ApiError(404, "user not found");
+       }
+
+        const isPasswordValid = await user.isPasswordCorrect(password);
+        console.log("ispassword is ",isPasswordValid);
+
+      if (!isPasswordValid) {
+      throw new ApiError(401, "Invalid password");
+          }
+            const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id);
+
+       const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+        new ApiResponse(
+            200, 
+            {
+                user, accessToken, refreshToken
+            },
+            "User logged In Successfully"
+        )
+    );
+
+
+
+});
+
+
+
 
 export {registeruser}
+export {loginuser};
