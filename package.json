@@ -2,13 +2,13 @@
   "name": "aibackend",
   "version": "1.0.0",
   "description": "project for ai interview resume",
-  "homepage": "https://github.com/yashsharma954/aibackend#readme",
+  "homepage": "httpss://github.com/yashsharma954/aibackend#readme",
   "bugs": {
-    "url": "https://github.com/yashsharma954/aibackend/issues"
+    "url": "httpss://github.com/yashsharma954/aibackend/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yashsharma954/aibackend.git"
+    "url": "git+httpss://github.com/yashsharma954/aibackend.git"
   },
   "license": "ISC",
   "author": "yash sharma",

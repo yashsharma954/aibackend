@@ -24,7 +24,7 @@ app.use(passport.initialize());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:8000/api/v1/user/google/callback",
+    callbackURL: "https://aibackend-ocu5.onrender.com/api/v1/user/google/callback",
     scope: ['profile', 'email']
   },
   async (accessToken, refreshToken, profile, done) => {

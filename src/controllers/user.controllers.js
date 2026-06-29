@@ -114,7 +114,7 @@ const loginuser=asyncHandler(async(req,res)=>{
             const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id);
 
        const options = {
-        httpOnly: true,
+        httpsOnly: true,
         secure: true
     }
 

@@ -16,7 +16,7 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 //     const accessToken = req.user.generateAccessToken();
 
 //     // Frontend ko redirect with token (ya cookie set kar sakte ho)
-//     res.redirect(`http://localhost:5173/auth?token=${accessToken}&userId=${req.user._id}`);
+//     res.redirect(`https://localhost:5173/auth?token=${accessToken}&userId=${req.user._id}`);
 //   }
 // );
 router.get("/google/callback",
@@ -33,7 +33,7 @@ router.get("/google/callback",
             const accessToken = req.user.generateAccessToken();
 
             // Frontend ko redirect
-            res.redirect(`http://localhost:5173/auth?token=${accessToken}&userId=${req.user._id}`);
+            res.redirect(`https://localhost:5173/auth?token=${accessToken}&userId=${req.user._id}`);
 
         } catch (error) {
             console.error("Google Callback Error:", error);
