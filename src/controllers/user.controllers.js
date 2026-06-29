@@ -4,7 +4,12 @@ import {ApiResponse} from "../utilis/ApiResponse.js";
 import { User } from "../models/user.model.js";
 
 const generateAccessAndRefereshTokens = async(userId) =>{
+
     try {
+
+        console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
+        console.log("REFRESH_TOKEN_SECRET:", process.env.REFRESH_TOKEN_SECRET);
+        
         const user= await User.findById(userId)
         console.log(user);
         const accessToken = user.generateAccessToken()
@@ -58,15 +63,7 @@ const registeruser=asyncHandler(async(req,res)=>{
         throw new ApiError(409, "User with name or phone already exists")
     }
 
-    // let avatar;
-    // const avatarLocalPath = req.files?.avatar?.[0]?.path;
-    // console.log("avatarLocalpath is ",avatarLocalPath);
-
-    //    if (avatarLocalPath) {
-    //       avatar = await uploadOnCloudinary(avatarLocalPath)
-    //       console.log("avatar is ",avatar.url);
-    //    }
-   
+    
     
      const user = await User.create({
         fullName,
