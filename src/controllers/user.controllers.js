@@ -3,31 +3,49 @@ import {ApiError} from "../utilis/ApiError.js";
 import {ApiResponse} from "../utilis/ApiResponse.js";
 import { User } from "../models/user.model.js";
 
-const generateAccessAndRefereshTokens = async(userId) =>{
+// const generateAccessAndRefereshTokens = async(userId) =>{
 
-    try {
+//     try {
 
-        console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
-        console.log("REFRESH_TOKEN_SECRET:", process.env.REFRESH_TOKEN_SECRET);
+//         console.log("ACCESS_TOKEN_SECRET:", process.env.ACCESS_TOKEN_SECRET);
+//         console.log("REFRESH_TOKEN_SECRET:", process.env.REFRESH_TOKEN_SECRET);
         
-        const user= await User.findById(userId)
-        console.log(user);
+//         const user= await User.findById(userId)
+//         console.log(user);
+//         const accessToken = user.generateAccessToken()
+//         console.log(accessToken);
+//         const refreshToken = user.generateRefreshToken()
+//         console.log(refreshToken);
+
+//         user.refreshToken = refreshToken
+//         await user.save({ validateBeforeSave: false })
+
+//         return {accessToken, refreshToken}
+
+
+//     } catch (error) {
+//         throw new ApiError(500, "Something went wrong while generating referesh and access token")
+//     }
+// }
+
+const generateAccessAndRefereshTokens = async(userId) =>{
+    try {
+        const user = await User.findById(userId)
         const accessToken = user.generateAccessToken()
-        console.log(accessToken);
         const refreshToken = user.generateRefreshToken()
-        console.log(refreshToken);
 
         user.refreshToken = refreshToken
         await user.save({ validateBeforeSave: false })
 
         return {accessToken, refreshToken}
 
-
     } catch (error) {
+        console.log("ACTUAL ERROR:", error)  // ⬅️ ye add karo
+        console.log("ERROR MESSAGE:", error.message)
+        console.log("ERROR NAME:", error.name)
         throw new ApiError(500, "Something went wrong while generating referesh and access token")
     }
 }
-
 const registeruser=asyncHandler(async(req,res)=>{
     // get user details from frontend
     // validation - not empty
