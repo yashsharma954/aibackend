@@ -9,16 +9,6 @@ const router=Router();
 router.route("/registeruser").post(registeruser);
 router.route("/login").post(loginuser);
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-
-// router.get("/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/auth" }),
-//   (req, res) => {
-//     const accessToken = req.user.generateAccessToken();
-
-//     // Frontend ko redirect with token (ya cookie set kar sakte ho)
-//     res.redirect(`https://localhost:5173/auth?token=${accessToken}&userId=${req.user._id}`);
-//   }
-// );
 router.get("/google/callback",
     passport.authenticate("google", { 
         failureRedirect: "/auth?error=google_failed",
@@ -33,7 +23,7 @@ router.get("/google/callback",
             const accessToken = req.user.generateAccessToken();
 
             // Frontend ko redirect
-            res.redirect(`https://localhost:5173/auth?token=${accessToken}&userId=${req.user._id}`);
+            res.redirect(`https://aifrontendinterview.vercel.app/auth?token=${accessToken}&userId=${req.user._id}`);
 
         } catch (error) {
             console.error("Google Callback Error:", error);
