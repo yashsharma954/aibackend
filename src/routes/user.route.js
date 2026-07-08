@@ -23,7 +23,7 @@ router.get("/google/callback",
             const accessToken = req.user.generateAccessToken();
 
             // Frontend ko redirect
-            res.redirect(`https://aifrontendinterview.vercel.app/auth?token=${accessToken}&userId=${req.user._id}`);
+            res.redirect(`https://aifrontend-ce3u.vercel.app/auth?token=${accessToken}&userId=${req.user._id}`);
 
         } catch (error) {
             console.error("Google Callback Error:", error);
