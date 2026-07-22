@@ -48,7 +48,6 @@ aibackend
 │   └── utils            # Helper functions & constants
 │
 ├── index.js             # Entry point
-├── .env.example         # Environment variables template
 ├── .gitignore
 ├── package.json
 └── README.md
