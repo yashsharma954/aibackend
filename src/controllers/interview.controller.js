@@ -32,6 +32,7 @@ const generateInterview = asyncHandler(async (req, res) => {
     const skills = resume.parsedData?.skills || [];
     const experienceLevel = resume.analysis?.experienceLevel || "Intermediate";
     const strengths = resume.analysis?.strengths || [];
+    
 
     if (resumeText.length < 50) {
         throw new ApiError(400, "Resume mein enough text nahi hai");
@@ -96,6 +97,8 @@ Return JSON in this exact format:
     if (!aiData.questions || aiData.questions.length === 0) {
         throw new ApiError(500, "AI questions generate karne mein fail ho gaya");
     }
+    const ALLOWED_TYPES = ["technical", "hr", "project", "behavioral"];
+const ALLOWED_DIFFICULTY = ["easy", "medium", "hard"];
 
     // ── Interview DB mein save karo ──
     const interview = await Interview.create({
@@ -109,16 +112,20 @@ Return JSON in this exact format:
 
     // ── Questions alag alag save karo ──
     const questionDocs = await Question.insertMany(
-        aiData.questions.map((q) => ({
+    aiData.questions.map((q) => {
+        const type = String(q.questionType || "").toLowerCase().trim();
+        const diff = String(q.difficulty || "").toLowerCase().trim();
+        return {
             interview: interview._id,
             user: userId,
             questionText: q.questionText,
             expectedAnswer: q.expectedAnswer || "",
-            questionType: q.questionType || "technical",
-            difficulty: q.difficulty || "medium",
+            questionType: ALLOWED_TYPES.includes(type) ? type : "technical",
+            difficulty: ALLOWED_DIFFICULTY.includes(diff) ? diff : "medium",
             isAnswered: false,
-        }))
-    );
+        };
+    })
+);
 
     // ── Interview mein questions ki IDs daalo ──
     interview.questions = questionDocs.map((q) => q._id);
@@ -172,7 +179,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
     // ── Groq se feedback lo ──
     const completion = await groq.chat.completions.create({
        model: "openai/gpt-oss-120b",
-        max_completion_tokensessages: [
+       messages: [
             {
                 role: "system",
                 content: "You are an expert technical interviewer. Evaluate the candidate's answer and return valid JSON only. No markdown, no explanation, just JSON."
@@ -323,7 +330,7 @@ const getMyInterviews = asyncHandler(async (req, res) => {
 
     const formatted = interviews.map(i => ({
         _id: i._id,
-        Role: i.role,
+        Role: i.Role,
         mode: i.mode,
         status: i.status,
         totalScore: i.totalScore || 0,
