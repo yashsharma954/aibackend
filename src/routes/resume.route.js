@@ -6,7 +6,7 @@ import { getMyResumes } from "../controllers/resume.controllers.js";
 
 const router=Router();
 router.route("/upload").post(
-    verifyJWT,                                   // Auth middleware
+    verifyJWT,                                   // auth middleware
     upload.single("resume"),                     // Multer single file
     uploadResume
 );

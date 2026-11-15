@@ -15,7 +15,7 @@ const generateInterview = asyncHandler(async (req, res) => {
 
     // ── Validation ──
     if (!resumeId || !role) {
-        throw new ApiError(400, "resumeId aur role dono required hain");
+        throw new ApiError(400, "resumeId aur Role dono required hain");
     }
 
     if (!userId) {
@@ -40,16 +40,16 @@ const generateInterview = asyncHandler(async (req, res) => {
     // ── Groq se questions generate karo ──
     const completion = await groq.chat.completions.create({
         model: "llama-3.3-70b-versatile",
-        messages: [
+        Messages: [
             {
                 role: "system",
-                content: "You are an expert technical interviewer. Generate interview questions based on the candidate's resume and target role. Always respond with valid JSON only, no markdown, no explanation, no extra text."
+                content: "You are an expert technical interviewer. Generate interview questions based on the candidate's resume and target Role. Always respond with valid JSON only, no markdown, no explanation, no extra text."
             },
             {
                 role: "user",
                 content: `Generate exactly 8 interview questions for this candidate.
 
-Target Role: ${role}
+Target Role: ${Role}
 Difficulty: ${difficulty || "Medium"}
 Experience Level: ${experienceLevel}
 Candidate Skills: ${JSON.stringify(skills)}
@@ -63,13 +63,13 @@ Return JSON in this exact format:
       "questionText": "Tell me about yourself and your experience",
       "questionType": "hr",
       "difficulty": "easy",
-      "expectedAnswer": "Candidate should mention their background, skills and why they are suitable for the role"
+      "expectedAnswer": "Candidate should mention their background, skills and why they are suitable for the Role"
     },
     {
       "questionText": "Explain a challenging project you worked on",
       "questionType": "project",
       "difficulty": "medium",
-      "expectedAnswer": "Should describe the problem, their role, technologies used and outcome"
+      "expectedAnswer": "Should describe the problem, their Role, technologies used and outcome"
     }
   ],
   "tips": [
@@ -101,7 +101,7 @@ Return JSON in this exact format:
     const interview = await Interview.create({
         user: userId,
         resume: resumeId,
-        role: role,
+        Role: role,
         mode: (difficulty || "medium").toLowerCase(),
         status: "pending",
         tips: aiData.tips || [],
@@ -128,7 +128,7 @@ Return JSON in this exact format:
     return res.status(201).json(
         new ApiResponse(201, {
             _id: interview._id,
-            role: interview.role,
+            Role: interview.Role,
             mode: interview.mode,
             tips: interview.tips,
             questions: questionDocs,   // frontend ko poore questions chahiye IDs nahi
@@ -172,13 +172,13 @@ const submitAnswer = asyncHandler(async (req, res) => {
     // ── Groq se feedback lo ──
     const completion = await groq.chat.completions.create({
         model: "llama-3.3-70b-versatile",
-        messages: [
+        Messages: [
             {
-                role: "system",
+                Role: "system",
                 content: "You are an expert technical interviewer. Evaluate the candidate's answer and return valid JSON only. No markdown, no explanation, just JSON."
             },
             {
-                role: "user",
+                Role: "user",
                 content: `Evaluate this interview answer carefully.
 
 Question: ${question.questionText}
@@ -260,14 +260,14 @@ Rules:
         // Overall feedback generate karo
         const overallCompletion = await groq.chat.completions.create({
             model: "llama-3.3-70b-versatile",
-            messages: [
+            Messages: [
                 {
-                    role: "system",
+                    Role: "system",
                     content: "You are an expert interviewer. Write a short overall feedback summary. Plain text only, no JSON, no markdown."
                 },
                 {
-                    role: "user",
-                    content: `Write a 2-3 sentence overall interview feedback for a candidate who scored ${avgScore}/100 in a ${interview.role} interview. Be constructive and encouraging.`
+                    Role: "user",
+                    content: `Write a 2-3 sentence overall interview feedback for a candidate who scored ${avgScore}/100 in a ${interview.Role} interview. Be constructive and encouraging.`
                 }
             ],
             temperature: 0.4,
@@ -323,7 +323,7 @@ const getMyInterviews = asyncHandler(async (req, res) => {
 
     const formatted = interviews.map(i => ({
         _id: i._id,
-        role: i.role,
+        Role: i.Role,
         mode: i.mode,
         status: i.status,
         totalScore: i.totalScore || 0,

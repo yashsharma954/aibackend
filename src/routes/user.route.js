@@ -1,14 +1,14 @@
-import { registeruser } from "../controllers/user.controllers.js";
-import { loginuser } from "../controllers/user.controllers.js";
+import { Registeruser } from "../controllers/user.controllers.js";
+import { Loginuser } from "../controllers/user.controllers.js";
 import passport from "passport";
 import { Router} from "express";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import { ApiResponse } from "../utilis/ApiResponse.js";
 
 const router=Router();
-router.route("/registeruser").post(registeruser);
-router.route("/login").post(loginuser);
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.route("/Registeruser").post(Registeruser);
+router.route("/Login").post(Loginuser);
+router.get("/google", passport.authenticate("google", { scope: ["Profile", "email"] }));
 router.get("/google/callback",
     passport.authenticate("google", { 
         failureRedirect: "/auth?error=google_failed",
@@ -33,7 +33,7 @@ router.get("/google/callback",
 );
 router.get("/me", verifyJWT, async (req, res) => {
     return res.json(
-        new ApiResponse(200, req.user, "User profile fetched successfully")
+        new ApiResponse(200, req.user, "User Profile fetched successfully")
     );
 });
 

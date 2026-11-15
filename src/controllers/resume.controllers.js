@@ -78,13 +78,13 @@ const uploadResume = asyncHandler(async (req, res) => {
 
            const completion = await groq.chat.completions.create({
     model: "llama-3.3-70b-versatile",  // free & powerful
-    messages: [
+    Messages: [
         {
-            role: "system",
+            Role: "system",
             content: "You are a resume analyzer. Always respond with valid JSON only, no markdown, no explanation."
         },
         {
-            role: "user",
+            Role: "user",
             content: `Analyze this resume and return only valid JSON:
 
 {

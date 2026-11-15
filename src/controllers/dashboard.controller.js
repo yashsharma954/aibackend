@@ -31,7 +31,7 @@ const getDashboardStats = asyncHandler(async (req, res) => {
     // Recent 5 interviews
     const recentInterviews = completedInterviews.slice(0, 5).map(i => ({
         _id: i._id,
-        role: i.role,
+        Role: i.Role,
         score: i.totalScore || 0,
         status: getScoreLabel(i.totalScore || 0),
         date: i.completedAt || i.createdAt,

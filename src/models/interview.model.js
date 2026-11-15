@@ -12,7 +12,7 @@ import bcrypt from "bcrypt";
         ref: "Resume",
         required: true
     },
-    role: {
+    Role: {
         type: String,
         required: true  // "Frontend Developer", "Backend Engineer" etc
     },

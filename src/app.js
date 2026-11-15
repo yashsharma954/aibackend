@@ -12,7 +12,7 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN|| "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "authorization"]
 }))
 
 app.use(express.json({limit: "16kb"}));
@@ -25,18 +25,18 @@ passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "https://aibackend-ocu5.onrender.com/api/v1/user/google/callback",
-    scope: ['profile', 'email']
+    scope: ['Profile', 'email']
   },
-  async (accessToken, refreshToken, profile, done) => {
+  async (accessToken, refreshToken, Profile, done) => {
     try {
-      let user = await User.findOne({ email: profile.emails[0].value });
+      let user = await User.findOne({ email: Profile.emails[0].value });
 
       if (!user) {
         user = await User.create({
-          fullName: profile.displayName,
-          email: profile.emails[0].value,
-          googleId: profile.id,
-          avatar: profile.photos?.[0]?.value || "",
+          fullName: Profile.displayName,
+          email: Profile.emails[0].value,
+          googleId: Profile.id,
+          avatar: Profile.photos?.[0]?.value || "",
           // password: null  // Google users ke liye password optional
         });
       }
@@ -52,13 +52,13 @@ passport.use(new GoogleStrategy({
 import UserRegister from "./routes/user.route.js";
 import resume from "./routes/resume.route.js";
 import interview from "./routes/interview.route.js";
-import dashboard from "./routes/dashboard.route.js";
+import Dashboard from "./routes/Dashboard.route.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
 app.use("/api/v1/user",UserRegister);
 app.use("/api/v1/resume",resume);
 app.use("/api/v1/interview",interview);
-app.use("/api/v1/dashboard",dashboard);
+app.use("/api/v1/Dashboard",Dashboard);
 app.use(errorHandler);
 
 
