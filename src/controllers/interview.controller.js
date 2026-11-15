@@ -40,7 +40,7 @@ const generateInterview = asyncHandler(async (req, res) => {
     // ── Groq se questions generate karo ──
     const completion = await groq.chat.completions.create({
        model: "openai/gpt-oss-120b",
-        Messages: [
+        messages: [
             {
                 role: "system",
                 content: "You are an expert technical interviewer. Generate interview questions based on the candidate's resume and target Role. Always respond with valid JSON only, no markdown, no explanation, no extra text."
@@ -172,13 +172,13 @@ const submitAnswer = asyncHandler(async (req, res) => {
     // ── Groq se feedback lo ──
     const completion = await groq.chat.completions.create({
        model: "openai/gpt-oss-120b",
-        Messages: [
+        max_completion_tokensessages: [
             {
-                Role: "system",
+                role: "system",
                 content: "You are an expert technical interviewer. Evaluate the candidate's answer and return valid JSON only. No markdown, no explanation, just JSON."
             },
             {
-                Role: "user",
+                role: "user",
                 content: `Evaluate this interview answer carefully.
 
 Question: ${question.questionText}
@@ -323,7 +323,7 @@ const getMyInterviews = asyncHandler(async (req, res) => {
 
     const formatted = interviews.map(i => ({
         _id: i._id,
-        Role: i.Role,
+        Role: i.role,
         mode: i.mode,
         status: i.status,
         totalScore: i.totalScore || 0,
