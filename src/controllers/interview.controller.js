@@ -39,7 +39,7 @@ const generateInterview = asyncHandler(async (req, res) => {
 
     // ── Groq se questions generate karo ──
     const completion = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
+       model: "openai/gpt-oss-120b",
         Messages: [
             {
                 role: "system",
@@ -49,7 +49,7 @@ const generateInterview = asyncHandler(async (req, res) => {
                 role: "user",
                 content: `Generate exactly 8 interview questions for this candidate.
 
-Target Role: ${Role}
+Target Role: ${role}
 Difficulty: ${difficulty || "Medium"}
 Experience Level: ${experienceLevel}
 Candidate Skills: ${JSON.stringify(skills)}
@@ -171,7 +171,7 @@ const submitAnswer = asyncHandler(async (req, res) => {
 
     // ── Groq se feedback lo ──
     const completion = await groq.chat.completions.create({
-        model: "llama-3.3-70b-versatile",
+       model: "openai/gpt-oss-120b",
         Messages: [
             {
                 Role: "system",
@@ -259,7 +259,7 @@ Rules:
 
         // Overall feedback generate karo
         const overallCompletion = await groq.chat.completions.create({
-            model: "llama-3.3-70b-versatile",
+           model: "openai/gpt-oss-120b",
             Messages: [
                 {
                     Role: "system",
