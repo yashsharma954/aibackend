@@ -52,7 +52,7 @@ passport.use(new GoogleStrategy({
 import UserRegister from "./routes/user.route.js";
 import resume from "./routes/resume.route.js";
 import interview from "./routes/interview.route.js";
-import Dashboard from "./routes/Dashboard.route.js";
+import Dashboard from "./routes/dashboard.route.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
 app.use("/api/v1/user",UserRegister);
