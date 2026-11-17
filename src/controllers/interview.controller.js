@@ -97,7 +97,7 @@ Return JSON in this exact format:
     if (!aiData.questions || aiData.questions.length === 0) {
         throw new ApiError(500, "AI questions generate karne mein fail ho gaya");
     }
-    const ALLOWED_TYPES = ["technical", "hr", "project", "behavioral"];
+    const ALLOWED_TYPES = ["technical", "behavioral", "hr", "project", "situational"];
 const ALLOWED_DIFFICULTY = ["easy", "medium", "hard"];
 
     // ── Interview DB mein save karo ──
@@ -192,7 +192,8 @@ Question: ${question.questionText}
 Question Type: ${question.questionType}
 Expected Answer Hint: ${question.expectedAnswer || "Not provided"}
 Candidate's Answer: ${userAnswer}
-
+ - questionType MUST be exactly one of: technical, behavioral, hr, project, situational
+- difficulty MUST be exactly one of: easy, medium, hard
 Return JSON in this exact format:
 {
   "score": 75,
@@ -267,13 +268,13 @@ Rules:
         // Overall feedback generate karo
         const overallCompletion = await groq.chat.completions.create({
            model: "openai/gpt-oss-120b",
-            Messages: [
+            max_completion_tokensessages: [
                 {
-                    Role: "system",
+                    role: "system",
                     content: "You are an expert interviewer. Write a short overall feedback summary. Plain text only, no JSON, no markdown."
                 },
                 {
-                    Role: "user",
+                    role: "user",
                     content: `Write a 2-3 sentence overall interview feedback for a candidate who scored ${avgScore}/100 in a ${interview.Role} interview. Be constructive and encouraging.`
                 }
             ],
